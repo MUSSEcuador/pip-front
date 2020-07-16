@@ -8,7 +8,7 @@ export default{
 
     getAllProductos: thunk(async (actions) => {
         axios
-          .get("http://localhost:1337/prod-fincas")
+          .get("https://pip-back.herokuapp.com/prod-fincas")
           .then((prod) => {
             actions.setAllProductos(prod.data);
           })

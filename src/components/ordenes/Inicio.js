@@ -2,15 +2,15 @@ import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useStoreActions, useStoreState } from "easy-peasy";
 
-import { Box, Grid } from "@material-ui/core";
+import { Box, Grid, Dialog } from "@material-ui/core";
 import Pagination from "@material-ui/lab/Pagination";
 
 import Producto from "./Producto";
 import Banners from "./Banners";
 import MenuLateral from "./MenuLateral";
+import Cart from "./Cart";
 
 const maxItemsPerPage = 2;
-
 
 const useStyles = makeStyles((theme) => ({
   banner: {
@@ -18,9 +18,20 @@ const useStyles = makeStyles((theme) => ({
     margin: "0 0 2vh 0",
     border: "outset",
   },
-  pagination:{
-    display: "inline-block"
+  pagination: {
+    display: "inline-block",
+  },
+  modal:{
+    height: "80vh",
+    width: "90vw",
+    [theme.breakpoints.down("sm")]: {
+      margin: "15vh 5vw",
+      height: "60vh",
+      width: "90vw",
+
+    }, 
   }
+
 }));
 
 function Inicio() {
@@ -29,6 +40,9 @@ function Inicio() {
   const [page, setPage] = React.useState(1);
   const [pageData, setPageData] = React.useState([]);
   const [countPages, setCountPages] = React.useState(1);
+  const [goToShop, setGoTOShop] = React.useState(false);
+  const [prodAComprar, seetProdAComprar] = React.useState();
+
   const allProductos = useStoreState((state) => state.allProductos);
   const getAllProductos = useStoreActions((actions) => actions.getAllProductos);
 
@@ -71,6 +85,15 @@ function Inicio() {
     setDataForPage(aux, 1);
   };
 
+  const goToCart = (seleccionado) => {
+    console.log(seleccionado);
+    seetProdAComprar(seleccionado);
+    setGoTOShop(true);
+  };
+  const closeCart = () => {
+    setGoTOShop(false);
+  };
+
   useEffect(() => {
     getAllProductos();
   }, [getAllProductos]);
@@ -97,9 +120,9 @@ function Inicio() {
         <Banners />
       </Box>
       <Grid container spacing={2}>
-        <Grid item xs={12} md={9} alignItems="center">
+        <Grid item xs={12} md={9}>
           <Pagination
-          className={classes.pagination}
+            className={classes.pagination}
             size="large"
             count={countPages}
             page={page}
@@ -114,6 +137,7 @@ function Inicio() {
                     <Producto
                       producto={producto}
                       setUnidadSelected={setUnidadSelected}
+                      goToCart={goToCart}
                     />
                   </Grid>
                 );
@@ -125,6 +149,11 @@ function Inicio() {
           <MenuLateral />
         </Grid>
       </Grid>
+      <Dialog open={goToShop} onClose={closeCart} className={classes.modal}>
+
+          <Cart producto={prodAComprar} />
+
+      </Dialog>
     </div>
   );
 }

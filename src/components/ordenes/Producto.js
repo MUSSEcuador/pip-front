@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "rgba(155,60,37, 0.05)",
   },
   media: {
-    margin: " 0 4vh",
+    margin: " 2px 4vh",
     height: "20vh",
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
@@ -88,7 +88,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Producto(props) {
-  const { producto, setUnidadSelected } = props;
+  const { producto, setUnidadSelected, goToCart } = props;
   const classes = useStyles();
 
   return (
@@ -144,6 +144,7 @@ function Producto(props) {
             <IconButton
               className={classes.button}
               aria-label="go to cart"
+              onClick={()=>{goToCart(producto)}}
             >
               <ShoppingCartIcon />
             </IconButton>
